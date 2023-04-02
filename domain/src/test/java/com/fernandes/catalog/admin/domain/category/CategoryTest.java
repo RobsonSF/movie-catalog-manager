@@ -8,20 +8,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CategoryTest {
 
+    public static final String EXPECTED_NAME = "movies";
+    public static final String EXPECTED_DESCRIPTION = "most watched";
+    public static final boolean EXPECTED_IS_ACTIVE = true;
+    public static final int EXPECTED_ERROR_COUNT = 1;
+
     @Test
     public void givenAValidParam_WhenCallNewCategory_ThenInstantiatedACategory(){
-        final var expectedName = "movies";
-        final var expectedDescription = "most watched";
-        final var expectedIsActive = true;
-
         final var actualCategory =
-                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+                Category.newCategory(EXPECTED_NAME, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
 
         assertNotNull(actualCategory);
         assertNotNull(actualCategory.getId());
-        assertEquals(expectedName, actualCategory.getName());
-        assertEquals(expectedDescription, actualCategory.getDescription());
-        assertEquals(expectedIsActive, actualCategory.isActive());
+        assertEquals(EXPECTED_NAME, actualCategory.getName());
+        assertEquals(EXPECTED_DESCRIPTION, actualCategory.getDescription());
+        assertEquals(EXPECTED_IS_ACTIVE, actualCategory.isActive());
         assertNotNull(actualCategory.getCreatedAt());
         assertNotNull(actualCategory.getUpdatedAt());
         assertNull(actualCategory.getDeletedAt());
@@ -29,70 +30,58 @@ public class CategoryTest {
 
     @Test
     public void givenAnInvalidNullName_WhenCallNewCategoryAndValidate_ThenReturnException(){
-        final String expectedName = null;
-        final var expectedDescription = "most watched";
-        final var expectedIsActive = true;
+        final String InvalidNullName = null;
         final var  expectedErrorMessage = "'name' should not be null";
-        final var  expectedErrorCount = 1;
 
         final var actualCategory =
-                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+                Category.newCategory(InvalidNullName, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
         final var actualException =
                 assertThrows(DomainException.class, () -> actualCategory.validate(new TrowsValidationHandler()));
 
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
-        assertEquals(expectedErrorCount, actualException.getErrors().size());
+        assertEquals(EXPECTED_ERROR_COUNT, actualException.getErrors().size());
     }
 
     @Test
     public void givenAnInvalidEmptyName_WhenCallNewCategoryAndValidate_ThenReturnException(){
-        final String expectedName = "";
-        final var expectedDescription = "most watched";
-        final var expectedIsActive = true;
+        final String InvalidEmptyName = "";
         final var  expectedErrorMessage = "'name' should not be empty";
-        final var  expectedErrorCount = 1;
 
         final var actualCategory =
-                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+                Category.newCategory(InvalidEmptyName, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
         final var actualException =
                 assertThrows(DomainException.class, () -> actualCategory.validate(new TrowsValidationHandler()));
 
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
-        assertEquals(expectedErrorCount, actualException.getErrors().size());
+        assertEquals(EXPECTED_ERROR_COUNT, actualException.getErrors().size());
     }
 
     @Test
     public void givenAnInvalidBlankName_WhenCallNewCategoryAndValidate_ThenReturnException(){
         final String expectedName = "   ";
-        final var expectedDescription = "most watched";
-        final var expectedIsActive = true;
         final var  expectedErrorMessage = "'name' should not be blank";
-        final var  expectedErrorCount = 1;
 
         final var actualCategory =
-                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+                Category.newCategory(expectedName, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
         final var actualException =
                 assertThrows(DomainException.class, () -> actualCategory.validate(new TrowsValidationHandler()));
 
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
-        assertEquals(expectedErrorCount, actualException.getErrors().size());
+        assertEquals(EXPECTED_ERROR_COUNT, actualException.getErrors().size());
     }
 
     @Test
     public void givenAnInvalidNameLengthLessThanTreeCharacters_WhenCallNewCategoryAndValidate_ThenReturnException(){
         final String expectedName = "go ";
-        final var expectedDescription = "most watched";
-        final var expectedIsActive = true;
         final var  expectedErrorMessage = "'name' must be between 3 and 255 characters";
-        final var  expectedErrorCount = 1;
 
         final var actualCategory =
-                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+                Category.newCategory(expectedName, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
         final var actualException =
                 assertThrows(DomainException.class, () -> actualCategory.validate(new TrowsValidationHandler()));
 
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
-        assertEquals(expectedErrorCount, actualException.getErrors().size());
+        assertEquals(EXPECTED_ERROR_COUNT, actualException.getErrors().size());
     }
 
     @Test
@@ -102,35 +91,31 @@ public class CategoryTest {
                                     + " Nunc leo sem, convallis sed lacus quis, interdum pretium nisl. "
                                     + "Ut nibh mi, efficitur eget interdum eget, pharetra eget nisl."
                                     + "Donec maximus tempor metus.";
-        final var expectedDescription = "most watched";
-        final var expectedIsActive = true;
+
         final var  expectedErrorMessage = "'name' must be between 3 and 255 characters";
-        final var  expectedErrorCount = 1;
 
         final var actualCategory =
-                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+                Category.newCategory(expectedName, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
         final var actualException =
                 assertThrows(DomainException.class, () -> actualCategory.validate(new TrowsValidationHandler()));
 
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
-        assertEquals(expectedErrorCount, actualException.getErrors().size());
+        assertEquals(EXPECTED_ERROR_COUNT, actualException.getErrors().size());
     }
 
     @Test
     public void givenAValidEmptyDescription_WhenCallNewCategory_ThenInstantiatedACategory(){
-        final var expectedName = "movies";
-        final var expectedDescription = "   ";
-        final var expectedIsActive = true;
+        final var expectedEmptyDescription = "   ";
 
         final var actualCategory =
-                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+                Category.newCategory(EXPECTED_NAME, expectedEmptyDescription, EXPECTED_IS_ACTIVE);
 
         assertDoesNotThrow(() -> actualCategory.validate(new TrowsValidationHandler()));
         assertNotNull(actualCategory);
         assertNotNull(actualCategory.getId());
-        assertEquals(expectedName, actualCategory.getName());
-        assertEquals(expectedDescription, actualCategory.getDescription());
-        assertEquals(expectedIsActive, actualCategory.isActive());
+        assertEquals(EXPECTED_NAME, actualCategory.getName());
+        assertEquals(expectedEmptyDescription, actualCategory.getDescription());
+        assertEquals(EXPECTED_IS_ACTIVE, actualCategory.isActive());
         assertNotNull(actualCategory.getCreatedAt());
         assertNotNull(actualCategory.getUpdatedAt());
         assertNull(actualCategory.getDeletedAt());
@@ -138,19 +123,17 @@ public class CategoryTest {
 
     @Test
     public void givenAValidFalseIsActive_WhenCallNewCategory_ThenInstantiatedACategory(){
-        final var expectedName = "movies";
-        final var expectedDescription = "most watched";
-        final var expectedIsActive = false;
+        final var expectedFalseIsActive = false;
 
         final var actualCategory =
-                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+                Category.newCategory(EXPECTED_NAME, EXPECTED_DESCRIPTION, expectedFalseIsActive);
 
         assertDoesNotThrow(() -> actualCategory.validate(new TrowsValidationHandler()));
         assertNotNull(actualCategory);
         assertNotNull(actualCategory.getId());
-        assertEquals(expectedName, actualCategory.getName());
-        assertEquals(expectedDescription, actualCategory.getDescription());
-        assertEquals(expectedIsActive, actualCategory.isActive());
+        assertEquals(EXPECTED_NAME, actualCategory.getName());
+        assertEquals(EXPECTED_DESCRIPTION, actualCategory.getDescription());
+        assertEquals(expectedFalseIsActive, actualCategory.isActive());
         assertNotNull(actualCategory.getCreatedAt());
         assertNotNull(actualCategory.getUpdatedAt());
         assertNotNull(actualCategory.getDeletedAt());
