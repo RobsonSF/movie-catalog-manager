@@ -4,6 +4,8 @@ import com.fernandes.catalog.admin.domain.exceptions.DomainException;
 import com.fernandes.catalog.admin.domain.validation.handler.TrowsValidationHandler;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CategoryTest {
@@ -140,10 +142,9 @@ public class CategoryTest {
     }
 
     @Test
-    public void givenAValidActiveParam_WhenCallDeactiveteCategory_ThenReturnACategoryInactiveted() {
+    public void givenAValidActiveCategory_WhenCallDeactivateCategory_ThenReturnACategoryInactivated() {
         final var categoryBeforeDeactivating =
                 Category.newCategory(EXPECTED_NAME, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
-        final var updatedAtBeforeDeactivating = categoryBeforeDeactivating.getUpdatedAt();
 
         assertDoesNotThrow(() -> categoryBeforeDeactivating.validate(new TrowsValidationHandler()));
         assertTrue(categoryBeforeDeactivating.isActive());
@@ -157,9 +158,26 @@ public class CategoryTest {
         assertEquals(categoryBeforeDeactivating.getDescription(), actualCategory.getDescription());
         assertEquals(categoryBeforeDeactivating.getCreatedAt(), actualCategory.getCreatedAt());
         assertFalse(actualCategory.isActive());
-        assertTrue(actualCategory.getUpdatedAt().isAfter(updatedAtBeforeDeactivating));
         assertNotNull(actualCategory.getDeletedAt());
     }
 
+    @Test
+    public void givenAValidInactiveCategory_WhenCallActivateCategory_ThenReturnACategoryActivated() {
+        final var categoryBeforeActivating =
+                Category.newCategory(EXPECTED_NAME, EXPECTED_DESCRIPTION, false);
 
+        assertDoesNotThrow(() -> categoryBeforeActivating.validate(new TrowsValidationHandler()));
+        assertFalse(categoryBeforeActivating.isActive());
+        assertNotNull(categoryBeforeActivating.getDeletedAt());
+
+        final var actualCategory = categoryBeforeActivating.activate();
+
+        assertDoesNotThrow(() -> actualCategory.validate(new TrowsValidationHandler()));
+        assertEquals(categoryBeforeActivating.getId(), actualCategory.getId());
+        assertEquals(categoryBeforeActivating.getName(), actualCategory.getName());
+        assertEquals(categoryBeforeActivating.getDescription(), actualCategory.getDescription());
+        assertEquals(categoryBeforeActivating.getCreatedAt(), actualCategory.getCreatedAt());
+        assertTrue(actualCategory.isActive());
+        assertNull(actualCategory.getDeletedAt());
+    }
 }
