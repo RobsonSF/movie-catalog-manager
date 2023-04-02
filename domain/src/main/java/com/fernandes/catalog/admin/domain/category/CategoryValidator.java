@@ -17,5 +17,9 @@ public class CategoryValidator extends Validator {
         if(this.category.getName()  == null){
             this.ValidationHandler().append(new Error("'name' should not be null"));
         }
+
+        if(this.category.getName().isEmpty()){
+            this.ValidationHandler().append(new Error("'name' should not be empty"));
+        }
     }
 }
