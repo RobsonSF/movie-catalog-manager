@@ -77,4 +77,21 @@ public class CategoryTest {
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
         assertEquals(expectedErrorCount, actualException.getErrors().size());
     }
+
+    @Test
+    public void givenAnInvalidNameLengthLessThanTreeCharacters_WhenCallNewCategoryAndValidate_ThenReturnException(){
+        final String expectedName = "go ";
+        final var expectedDescription = "most watched";
+        final var expectedIsActive = true;
+        final var  expectedErrorMessage = "'name' must have more than 3 characters";
+        final var  expectedErrorCount = 1;
+
+        final var actualCategory =
+                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+        final var actualException =
+                assertThrows(DomainException.class, () -> actualCategory.validate(new TrowsValidationHandler()));
+
+        assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+        assertEquals(expectedErrorCount, actualException.getErrors().size());
+    }
 }
