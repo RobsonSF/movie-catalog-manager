@@ -25,5 +25,9 @@ public class CategoryValidator extends Validator {
         if(this.category.getName().isBlank()){
             this.ValidationHandler().append(new Error("'name' should not be blank"));
         }
+
+        if(this.category.getName().trim().length() <= 3){
+            this.ValidationHandler().append(new Error("'name' must have more than 3 characters"));
+        }
     }
 }
