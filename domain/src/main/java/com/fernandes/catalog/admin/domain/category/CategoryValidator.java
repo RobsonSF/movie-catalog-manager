@@ -21,5 +21,9 @@ public class CategoryValidator extends Validator {
         if(this.category.getName().isEmpty()){
             this.ValidationHandler().append(new Error("'name' should not be empty"));
         }
+
+        if(this.category.getName().isBlank()){
+            this.ValidationHandler().append(new Error("'name' should not be blank"));
+        }
     }
 }
