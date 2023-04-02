@@ -60,4 +60,21 @@ public class CategoryTest {
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
         assertEquals(expectedErrorCount, actualException.getErrors().size());
     }
+
+    @Test
+    public void givenAnInvalidBlankName_WhenCallNewCategoryAndValidate_ThenReturnException(){
+        final String expectedName = "   ";
+        final var expectedDescription = "most watched";
+        final var expectedIsActive = true;
+        final var  expectedErrorMessage = "'name' should not be blank";
+        final var  expectedErrorCount = 1;
+
+        final var actualCategory =
+                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+        final var actualException =
+                assertThrows(DomainException.class, () -> actualCategory.validate(new TrowsValidationHandler()));
+
+        assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+        assertEquals(expectedErrorCount, actualException.getErrors().size());
+    }
 }
