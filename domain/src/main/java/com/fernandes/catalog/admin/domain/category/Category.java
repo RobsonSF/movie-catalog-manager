@@ -47,10 +47,20 @@ public class Category extends AggregateRoot<CategoryID> {
     public CategoryID getId() {
         return id;
     }
-
     @Override
     public void validate(ValidationHandler handler) {
         new CategoryValidator(this, handler).validate();
+    }
+
+    public Category deactivate() {
+        final var now = Instant.now();
+        if(getDeletedAt() == null){
+            this.deletedAt = now;
+        }
+
+        this.updatedAt = now;
+        this.active = false;
+        return this;
     }
 
     public String getName() {
