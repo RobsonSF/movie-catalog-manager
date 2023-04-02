@@ -83,7 +83,7 @@ public class CategoryTest {
         final String expectedName = "go ";
         final var expectedDescription = "most watched";
         final var expectedIsActive = true;
-        final var  expectedErrorMessage = "'name' must have more than 3 characters";
+        final var  expectedErrorMessage = "'name' must be between 3 and 255 characters";
         final var  expectedErrorCount = 1;
 
         final var actualCategory =
@@ -94,4 +94,26 @@ public class CategoryTest {
         assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
         assertEquals(expectedErrorCount, actualException.getErrors().size());
     }
+
+    @Test
+    public void givenAnInvalidNameLengthGreaterThan255Characters_WhenCallNewCategoryAndValidate_ThenReturnException(){
+        final String expectedName = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                                    + "Etiam massa urna, lacinia ac turpis quis, consectetur tincidunt ex."
+                                    + " Nunc leo sem, convallis sed lacus quis, interdum pretium nisl. "
+                                    + "Ut nibh mi, efficitur eget interdum eget, pharetra eget nisl."
+                                    + "Donec maximus tempor metus.";
+        final var expectedDescription = "most watched";
+        final var expectedIsActive = true;
+        final var  expectedErrorMessage = "'name' must be between 3 and 255 characters";
+        final var  expectedErrorCount = 1;
+
+        final var actualCategory =
+                Category.newCategory(expectedName, expectedDescription, expectedIsActive);
+        final var actualException =
+                assertThrows(DomainException.class, () -> actualCategory.validate(new TrowsValidationHandler()));
+
+        assertEquals(expectedErrorMessage, actualException.getErrors().get(0).message());
+        assertEquals(expectedErrorCount, actualException.getErrors().size());
+    }
+
 }
