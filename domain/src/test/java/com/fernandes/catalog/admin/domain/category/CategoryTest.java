@@ -207,5 +207,28 @@ public class CategoryTest {
         assertNull(actualCategory.getDeletedAt());
     }
 
+    @Test
+    public void givenAValidParams_WhenCallUpdateCategoryInactive_ThenReturnACategoryUpdated() {
+        final var categoryBeforeUpdating =
+                Category.newCategory(EXPECTED_NAME, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
 
+        assertDoesNotThrow(() -> categoryBeforeUpdating.validate(new TrowsValidationHandler()));
+        assertEquals(EXPECTED_NAME, categoryBeforeUpdating.getName());
+        assertEquals(EXPECTED_DESCRIPTION, categoryBeforeUpdating.getDescription());
+        assertTrue(categoryBeforeUpdating.isActive());
+
+        final var updateName = "update name";
+        final var updateDescription = "update description";
+        final var updateIsActive = false;
+
+        final var actualCategory = categoryBeforeUpdating.update(updateName, updateDescription, updateIsActive);
+
+        assertDoesNotThrow(() -> actualCategory.validate(new TrowsValidationHandler()));
+        assertEquals(categoryBeforeUpdating.getId(), actualCategory.getId());
+        assertEquals(updateName, actualCategory.getName());
+        assertEquals(updateDescription, actualCategory.getDescription());
+        assertEquals(categoryBeforeUpdating.getCreatedAt(), actualCategory.getCreatedAt());
+        assertFalse(actualCategory.isActive());
+        assertNotNull(actualCategory.getDeletedAt());
+    }
 }
