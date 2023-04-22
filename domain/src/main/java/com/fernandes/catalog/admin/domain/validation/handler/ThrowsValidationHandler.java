@@ -6,7 +6,7 @@ import com.fernandes.catalog.admin.domain.validation.ValidationHandler;
 
 import java.util.List;
 
-public class TrowsValidationHandler implements ValidationHandler {
+public class ThrowsValidationHandler implements ValidationHandler {
     @Override
     public ValidationHandler append(final Error anError) {
         throw DomainException.with(anError);
