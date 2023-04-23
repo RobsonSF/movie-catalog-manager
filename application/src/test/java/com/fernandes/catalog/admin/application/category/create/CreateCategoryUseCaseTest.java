@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Objects;
@@ -57,6 +56,21 @@ public class CreateCategoryUseCaseTest {
     public void givenAnInvalidEmptyName_whenCallsCreateCategory_thenShouldReturnDomainException(){
         final var invalidName = "";
         final var expectedErrorMassage = "'name' should not be empty";
+
+        final var  aCommand = CreateCategoryCommand.with(invalidName, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
+
+        final var actualException =
+                assertThrows(DomainException.class, () -> defaultCreateCategoryUseCase.execute(aCommand));
+
+        assertEquals(expectedErrorMassage, actualException.getMessage());
+
+        verify(categoryGateway, times(0)).create(any());
+    }
+
+    @Test
+    public void givenAnInvalidNameWithLessThan3Characters_whenCallsCreateCategory_thenShouldReturnDomainException(){
+        final var invalidName = "an ";
+        final var expectedErrorMassage = "'name' must be between 3 and 255 characters";
 
         final var  aCommand = CreateCategoryCommand.with(invalidName, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
 
