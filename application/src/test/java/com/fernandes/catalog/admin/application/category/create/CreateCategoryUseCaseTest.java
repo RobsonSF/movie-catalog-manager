@@ -54,9 +54,24 @@ public class CreateCategoryUseCaseTest {
     }
 
     @Test
-    public void givenAInvalidEmptyName_whenCallsCreateCategory_thenShouldReturnDomainException(){
+    public void givenAnInvalidEmptyName_whenCallsCreateCategory_thenShouldReturnDomainException(){
         final var invalidName = "";
         final var expectedErrorMassage = "'name' should not be empty";
+
+        final var  aCommand = CreateCategoryCommand.with(invalidName, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
+
+        final var actualException =
+                assertThrows(DomainException.class, () -> defaultCreateCategoryUseCase.execute(aCommand));
+
+        assertEquals(expectedErrorMassage, actualException.getMessage());
+
+        verify(categoryGateway, times(0)).create(any());
+    }
+
+    @Test
+    public void givenAnInvalidNullName_whenCallsCreateCategory_thenShouldReturnDomainException(){
+        final String invalidName = null;
+        final var expectedErrorMassage = "'name' should not be null";
 
         final var  aCommand = CreateCategoryCommand.with(invalidName, EXPECTED_DESCRIPTION, EXPECTED_IS_ACTIVE);
 
